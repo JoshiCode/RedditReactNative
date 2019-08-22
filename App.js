@@ -48,21 +48,23 @@ export class App extends React.Component{
   }*/
   renderItetemList(item)
   {
-     return(<View style={{flexDirection: "row", flex: 1, borderBottomWidth: 1 ,borderBottomColor : "#d1d1d1"}}>
-            
+     return(
+          
+          <View style={{flexDirection: "row", flex: 1, borderBottomWidth: 1 ,borderBottomColor : "#d1d1d1", alignItems: "center", justifyContent:"center"}}>           
             <View style={{flex:1, }} >
-              <Image style={{width: 50, height: 50,}} source={{ uri: item.data.thumbnail }}></Image>
+              <Image style={{width: 60, height: 60, borderRadius: 60/2}} source={{uri: item.data.thumbnail}} ></Image>
             </View>
             <View style={{flex: 2, }}>
               <Text style={{color: "#20d2f4", fontSize: 14, paddingBottom: 5, fontFamily: "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace"}}>{item.data.author}</Text>
               <Text style={{color: "black", fontFamily: "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace", flexWrap: "wrap"}}> {item.data.title}</Text>
-              <View style={{flexDirection:"row"}}>
-                <View><Image style={{width:16, height:16,}} source={require('./icon-sprite.png')}></Image><Text style={styles.postSocial}>{item.data.num_comments} comments</Text></View>
-                <View><Image style={{width:16, height:16,}} source={{uri: './icon-sprite.png', crop:{left: -16, top: 0, width:16, height: 16  }}}></Image><Text style={styles.postSocial}>{item.data.ups} ups</Text></View> 
-                <View><Image style={{width:16, height:16,}} source={{uri: './icon-sprite.png', crop:{left: 16, top: 0, width:16, height: 16  }}}></Image><Text style={styles.postSocial}>{item.data.downs} downs</Text></View>
+              <View style={{flexDirection:"row", flex:1}}>
+                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={require('./icon-sprite.png')}></Image><Text style={styles.postSocial}>{item.data.num_comments} comments</Text></View>
+                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={{uri: './icon-sprite.png'}}></Image><Text style={styles.postSocial}>{item.data.ups} ups</Text></View> 
+                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={{uri: './icon-sprite.png'}}></Image><Text style={styles.postSocial}>{item.data.downs} downs</Text></View>
             </View>
             </View>
-            </View>);
+          </View>
+         );
   }
   getRedditResults(){
     return fetch('http://www.reddit.com/r/'+ this.state.textToSearch +'/.json').then((response) => response.json()).then((responseJson) => {       
@@ -79,14 +81,6 @@ export class App extends React.Component{
    <Fragment>
     <StatusBar barStyle="dark-content" />
     <SafeAreaView>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}>
-        {global.HermesInternal == null ? null : (
-          <View style={styles.engine}>
-            <Text style={styles.footer}>Engine: Hermes</Text>
-          </View>
-        )}
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
             <TextInput
@@ -107,14 +101,15 @@ export class App extends React.Component{
           <Text>
                Total Results: {this.state.redditPosts.length}
             </Text>
-            <FlatList style={{flex:1,  borderColor: "#d1d1d1", borderWidth: 1, padding: 5}}
+            <ScrollView style={{borderColor: "#d1d1d1", borderWidth: 1,}}>
+            <FlatList style={{flex:1,  padding: 5}}
               data={this.state.redditPosts}
               renderItem={({item}) => this.renderItetemList(item)}
              
             />
+            </ScrollView>
           </View>
         </View>
-      </ScrollView>
     </SafeAreaView>
   </Fragment>);
  }
