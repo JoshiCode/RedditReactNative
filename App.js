@@ -8,6 +8,7 @@
 
 
 import React, {Fragment, Component} from 'react';
+import axios from 'axios';
 import {
   SafeAreaView,
   StyleSheet,
@@ -34,6 +35,9 @@ export class App extends React.Component{
 
   constructor(props){
     super(props);
+
+
+    
     this.state = { redditPosts:  [], textToSearch : '' };
   }
   
@@ -58,21 +62,28 @@ export class App extends React.Component{
               <Text style={{color: "#20d2f4", fontSize: 14, paddingBottom: 5, fontFamily: "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace"}}>{item.data.author}</Text>
               <Text style={{color: "black", fontFamily: "Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace", flexWrap: "wrap"}}> {item.data.title}</Text>
               <View style={{flexDirection:"row", flex:1}}>
-                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={require('./icon-sprite.png')}></Image><Text style={styles.postSocial}>{item.data.num_comments} comments</Text></View>
-                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={{uri: './icon-sprite.png'}}></Image><Text style={styles.postSocial}>{item.data.ups} ups</Text></View> 
-                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={{uri: './icon-sprite.png'}}></Image><Text style={styles.postSocial}>{item.data.downs} downs</Text></View>
+                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={require('./icon-sprite-comment.png')}></Image><Text style={styles.postSocial}>{item.data.num_comments} comments</Text></View>
+                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={require('./icon-sprite.png')}></Image><Text style={styles.postSocial}>{item.data.ups} ups</Text></View> 
+                <View style={{flex:1}}><Image style={{width:16, height:16,}} source={require('./icon-sprite-downs.png')}></Image><Text style={styles.postSocial}>{item.data.downs} downs</Text></View>
             </View>
             </View>
           </View>
          );
   }
   getRedditResults(){
-    return fetch('http://www.reddit.com/r/'+ this.state.textToSearch +'/.json').then((response) => response.json()).then((responseJson) => {       
+    /*return fetch('http://www.reddit.com/r/'+ this.state.textToSearch +'/.json').then((response) => response.json()).then((responseJson) => {       
         this.setState({
           redditPosts:  responseJson.data.children,
         });
       }).catch((error) => {
        console.error(error);
+      });*/
+      return axios.get('http://www.reddit.com/r/'+ this.state.textToSearch +'/.json').then(response => 
+      this.setState({
+        redditPosts:  response.data.data.children,
+      }))
+      .catch(error => {
+        console.log(error);
       });
   }
  render()
